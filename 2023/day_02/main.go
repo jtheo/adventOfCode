@@ -44,6 +44,9 @@ func main() {
 		sum += i
 	}
 	fmt.Printf("List of valid Games: %+v\n\nResult is: %d\n", b, sum)
+
+	part2 := summarize2(input, want)
+	fmt.Printf("Result part 2: %d\n", part2)
 }
 
 func getData(fn string) ([]string, error) {
@@ -96,7 +99,7 @@ func checkGame(game string, want map[string]int) bool {
 		c := strings.Split(s, ", ")
 		for _, nc := range c {
 			t := strings.Split(nc, " ")
-			color := t[1]
+			colour := t[1]
 			num, err := strconv.Atoi(strings.TrimSpace(t[0]))
 			if err != nil {
 				for i := range t {
@@ -104,9 +107,9 @@ func checkGame(game string, want map[string]int) bool {
 				}
 				log.Fatalf("%q is not a number\nline: %v\n%v\n", t[0], t, err)
 			}
-			// fmt.Printf("num: %d > want[color]: %v, color: %s\n", num, want[color], color)
-			if num > want[color] {
-				// fmt.Printf("%s is too big: %d\n", color, num)
+			// fmt.Printf("num: %d > want[colour]: %v, colour: %s\n", num, want[colour], colour)
+			if num > want[colour] {
+				// fmt.Printf("%s is too big: %d\n", colour, num)
 				ret = false
 				break
 			}
@@ -114,4 +117,48 @@ func checkGame(game string, want map[string]int) bool {
 	}
 
 	return ret
+}
+
+func getCubes(game string, want map[string]int) int {
+	sets := strings.Split(game, "; ")
+	maxForColour := map[string]int{
+		"red":   0,
+		"blue":  0,
+		"green": 0,
+	}
+
+	for _, s := range sets {
+		c := strings.Split(s, ", ")
+		for _, nc := range c {
+			t := strings.Split(nc, " ")
+			colour := t[1]
+			num, err := strconv.Atoi(strings.TrimSpace(t[0]))
+			if err != nil {
+				for i := range t {
+					fmt.Printf("%d: %v\n", i, t[i])
+				}
+				log.Fatalf("%q is not a number\nline: %v\n%v\n", t[0], t, err)
+			}
+			if maxForColour[colour] < num {
+				maxForColour[colour] = num
+			}
+		}
+	}
+
+	sumCubes := 1
+	for _, n := range maxForColour {
+		sumCubes *= n
+	}
+	return sumCubes
+}
+
+func summarize2(input []string, want map[string]int) int {
+	sum := 0
+	for _, l := range input {
+		tmp := strings.Split(l, ": ")
+		g := getCubes(tmp[1], want)
+		sum += g
+	}
+
+	return sum
 }
