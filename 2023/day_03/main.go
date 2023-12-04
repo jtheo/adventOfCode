@@ -21,20 +21,21 @@ func part1(input [][]string) int {
 		s, e := 0, 0
 		isNum := false
 		rightStop := len(l) - 1
-		fmt.Print(" ")
+		fmt.Print("   ")
 		for i := range l {
 			fmt.Printf("%d ", i)
 		}
 		fmt.Println()
-		fmt.Println(l, "rightStop", rightStop)
+		fmt.Println(i, l)
 
 		for x, c := range l {
 			if c >= "0" && c <= "9" {
 				if !isNum {
 					s = x
+					e = x
 					isNum = true
-
 				}
+				e++
 				if x < rightStop {
 					continue
 				}
@@ -42,10 +43,6 @@ func part1(input [][]string) int {
 
 			if isNum {
 				isNum = false
-				e = x
-				if e == rightStop {
-					e++
-				}
 				if lookAroundForSymbols(i, s, e, input) {
 					valid := strings.Join(l[s:e], "")
 					n, err := strconv.Atoi(valid)
