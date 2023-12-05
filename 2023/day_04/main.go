@@ -14,37 +14,31 @@ func main() {
 	fmt.Printf("Day 4, part 2. Result: %d\n", res)
 }
 
-func part1(games data) int {
-	res := 0
-	for _, c := range games {
-		tmp := 0
+func part2(games data) int {
+	nGames := len(games)
+	wins := make([]int, nGames)
+	for i, c := range games {
+		win := 0
 		for _, n := range c.winning {
 			if contains(n, c.played) {
-				if tmp == 0 {
-					tmp = 1
-				} else {
-					tmp *= 2
-				}
-				continue
+				win++
+				wins[i]++
 			}
 		}
-		res += tmp
-	}
 
-	return res
-}
-
-func part2(m data) int {
-	res := 0
-
-	return res
-}
-
-func contains(n int, played []int) bool {
-	for _, i := range played {
-		if i == n {
-			return true
+		fmt.Printf("Card %d: %+v | %+v | %-3d\n", i+1, c.winning, c.played, win)
+		for x := 0; x < wins[i]; x++ {
+			card := (i + x + 1) % nGames
+			wins[card]++
 		}
 	}
-	return false
+
+	res := 0
+
+	for _, w := range wins {
+		// fmt.Println(p+1, w)
+		res += w
+	}
+
+	return res
 }

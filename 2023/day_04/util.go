@@ -84,3 +84,12 @@ func getData(fn string) ([]string, error) {
 
 	return res, nil
 }
+
+func contains(n int, played []int) bool {
+	for _, i := range played {
+		if i == n {
+			return true
+		}
+	}
+	return false
+}
