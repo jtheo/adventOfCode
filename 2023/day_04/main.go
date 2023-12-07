@@ -18,25 +18,25 @@ func part2(games data) int {
 	nGames := len(games)
 	wins := make([]int, nGames)
 	for i, c := range games {
-		win := 0
+		wins[i]++
+		nextGames := 0
 		for _, n := range c.winning {
 			if contains(n, c.played) {
-				win++
-				wins[i]++
+				nextGames++
 			}
 		}
 
-		fmt.Printf("Card %d: %+v | %+v | %-3d\n", i+1, c.winning, c.played, win)
-		for x := 0; x < wins[i]; x++ {
-			card := (i + x + 1) % nGames
-			wins[card]++
+		for o := 0; o < wins[i]; o++ {
+			for x := 0; x < nextGames; x++ {
+				card := (i + 1 + x)
+				wins[card]++
+			}
 		}
 	}
 
 	res := 0
 
 	for _, w := range wins {
-		// fmt.Println(p+1, w)
 		res += w
 	}
 
