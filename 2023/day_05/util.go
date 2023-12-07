@@ -51,6 +51,7 @@ var (
 		"water-to-light",
 		"light-to-temperature",
 		"temperature-to-humidity",
+		"humidity-to-location",
 	}
 	seeds = []int{}
 )
@@ -76,7 +77,7 @@ func unmarshal(input []string) (almanac, error) {
 			for _, n := range t2 {
 				x, err := strconv.Atoi(strings.TrimSpace(n))
 				if err != nil {
-					log.Panic("converting", n, "from", t2, "got:", err)
+					log.Panic("converting: ", n, " from: ", t2, " got: ", err)
 				}
 				a.seeds = append(a.seeds, x)
 			}
