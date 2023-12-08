@@ -56,6 +56,40 @@ var (
 	seeds = []int{}
 )
 
+func seedsPart1(l string) []int {
+	res := []int{}
+	t := strings.Split(l, ": ")
+	t2 := strings.Split(t[1], " ")
+
+	for _, n := range t2 {
+		x, err := strconv.Atoi(strings.TrimSpace(n))
+		if err != nil {
+			log.Panic("converting: ", n, " from: ", t2, " got: ", err)
+		}
+		res = append(res, x)
+	}
+
+	return res
+}
+
+func seedsPart2(seeds []int) []int {
+	res := []int{}
+	fmt.Println("received:", seeds)
+
+	i := 0
+	for i < len(seeds) {
+		from := seeds[i]
+		to := seeds[i+1]
+
+		for s := 0; s < to; s++ {
+			res = append(res, s+from)
+		}
+		i += 2
+	}
+
+	return res
+}
+
 func unmarshal(input []string) (almanac, error) {
 	a := almanac{
 		seeds:  []int{},
@@ -71,16 +105,7 @@ func unmarshal(input []string) (almanac, error) {
 		}
 
 		if strings.HasPrefix(l, "seeds:") {
-			t := strings.Split(l, ": ")
-			t2 := strings.Split(t[1], " ")
-
-			for _, n := range t2 {
-				x, err := strconv.Atoi(strings.TrimSpace(n))
-				if err != nil {
-					log.Panic("converting: ", n, " from: ", t2, " got: ", err)
-				}
-				a.seeds = append(a.seeds, x)
-			}
+			a.seeds = seedsPart1(l)
 		}
 
 		if strings.HasSuffix(l, "map:") {
